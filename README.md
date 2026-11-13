@@ -34,6 +34,51 @@ and helpers.
   directly).
 - **Nothing fails silently.** Every check that fails sends a notification and writes to the logbook.
 
+## How it works
+
+**Power-up** (the ON button, or the schedule at sunset):
+
+```mermaid
+flowchart TD
+    A([ON pressed or sunset]) --> R{Rain check<br/>chance of rain over your limit?}
+    R -- "yes, and 'ignore rain' is off" --> S([Skip tonight + notify you])
+    R -- "no, or forecast unreadable (you're told)" --> C[Cancel any shutdown in progress]
+    C --> N[Next switch, projectors first]
+    N --> T[Turn it on, wait up to 10 s for it to report ON]
+    T --> V{Reported ON?}
+    V -- no --> RT{Tried 3 times?}
+    RT -- no --> T
+    RT -- yes --> L[Move on (each retry is logged)]
+    V -- yes --> G[Short gap to spread the inrush current]
+    L --> G
+    G --> M{More switches?}
+    M -- yes --> N
+    M -- no --> F{Any switch still not ON?}
+    F -- yes --> X([Notify: names the switches that failed])
+    F -- no --> OK([Logbook: all on])
+```
+
+Delayed props come last, and a smart plug powered *by* another switch is waited for until it's
+online before it's turned on. (The rain check runs on the scheduled power-up only; the button always works.)
+
+**Safe shutdown** (the OFF button, or the schedule):
+
+```mermaid
+flowchart TD
+    A([OFF pressed or schedule]) --> C[Cancel any power-up in progress]
+    C --> P[Projectors to standby: lamps start cooling]
+    P --> S[Sound off now]
+    S --> L{Scheduled night?}
+    L -- yes --> LL[Lights stay on until the lights-off time]
+    L -- no --> LO[Lights off now]
+    LL --> W[Wait for the lamp cool-down]
+    LO --> W
+    W --> Q{Confirm sensor says the lamp is off?<br/>or no sensor configured}
+    Q -- yes --> CUT[Cut projector power]
+    Q -- "no, after 5 more minutes" --> KEEP([Leave projector power ON + notify you])
+    CUT --> DONE([Logbook: projector power off])
+```
+
 ## Quick start
 
 ```bash
