@@ -48,7 +48,7 @@ flowchart TD
     T --> V{Reported ON?}
     V -- no --> RT{Tried 3 times?}
     RT -- no --> T
-    RT -- yes --> L[Move on (each retry is logged)]
+    RT -- yes --> L["Move on (each retry is logged)"]
     V -- yes --> G[Short gap to spread the inrush current]
     L --> G
     G --> M{More switches?}
