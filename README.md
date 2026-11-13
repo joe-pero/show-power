@@ -37,9 +37,7 @@ and helpers.
 ## Quick start
 
 ```bash
-git clone https://github.com/joe-pero/show-power
-cd show-power
-pip install -e .
+pip install "git+https://github.com/joe-pero/show-power@v1.0.0"
 
 cp examples/config.example.yaml my_yard.yaml     # change the entity ids to your own
 showpower check my_yard.yaml                     # validates and prints the plan
@@ -72,6 +70,8 @@ Yard Show: 6 switches, season 10-01 to 10-31
     other     Fog machine (plugged into the extension cord)  (waits 90s to come online, powered via switch.extension_cord_plug)
   button: switch.yard_show_power   skip dates: input_text.yard_show_skip_dates
 ```
+
+Release notes: [CHANGELOG.md](CHANGELOG.md).
 
 ## The config
 
