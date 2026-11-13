@@ -1,5 +1,7 @@
 # show-power
 
+[![tests](https://github.com/joe-pero/show-power/actions/workflows/tests.yml/badge.svg)](https://github.com/joe-pero/show-power/actions/workflows/tests.yml)
+
 **Safe, checked, weather-aware power for outdoor displays in Home Assistant.**
 
 Halloween yards and Christmas light shows usually run on smart plugs and a couple of timers.
