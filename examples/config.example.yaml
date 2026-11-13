@@ -1,0 +1,58 @@
+# show-power example: a front-yard Halloween display.
+# Copy this, change the entity ids to your own (Settings -> Entities in Home Assistant), then:
+#   showpower check my_yard.yaml
+#   showpower build my_yard.yaml -o packages/yard_power.yaml
+
+name: Yard Show
+
+notify:                       # optional: phone push etc. A Home Assistant notification is always sent.
+  - notify.mobile_app_my_phone
+
+switches:                     # power-on order: projectors first (longest warm-up), delayed ones last
+  - entity: switch.porch_projectors_plug
+    name: Porch projectors
+    role: projector           # projector | sound | lights | other
+  - entity: switch.yard_speakers_plug
+    name: Yard speakers
+    role: sound
+  - entity: switch.animatronics_plug
+    name: Animatronics
+    role: sound               # anything that makes noise goes off at show end
+  - entity: switch.pathway_lights
+    name: Pathway lights
+    role: lights              # lights only: can stay on later than the show
+  - entity: switch.extension_cord_plug
+    name: Back-of-yard extension cord
+    role: other
+    delay_before_s: 120       # comes on 2 minutes after the rest (a prop that needs a delayed start)
+  - entity: switch.fog_machine_plug
+    name: Fog machine (plugged into the extension cord)
+    role: other
+    wait_online_s: 90         # a smart plug powered BY the extension cord: wait for it to boot first
+    cut_by: switch.extension_cord_plug    # the cord cuts its power; never switched off directly
+
+schedule:
+  on: sunset-15               # or a time, e.g. "18:00"
+  off_weeknight: "20:30"      # Sun-Thu
+  off_weekend: "21:30"        # Fri-Sat
+  lights_off: "23:00"         # optional
+  season: {start: "10-01", end: "10-31"}
+  manual_off_dates: ["10-31"] # nights you turn it off yourself (the schedule never does)
+
+projectors:
+  standby:                    # optional: whatever puts the lamps in standby (IR blaster, RS-232, script)
+    - button.porch_projector_power
+  confirm:                    # optional: a sensor that proves the lamp is off. If set, power is cut ONLY
+    - entity: sensor.porch_projector_state   # when this agrees; otherwise it stays on and you're told.
+      off_state: standby
+  cool_down_min: 15           # wait between standby and cutting the power
+
+rain:                         # optional: skip rainy nights automatically
+  weather_entity: weather.home
+  threshold: 50               # % chance of rain that skips the night
+  window_hours: 4             # how far ahead of the ON time to look
+
+verify:
+  tries: 3                    # re-send turn_on up to this many times
+  wait_s: 10                  # seconds to wait for 'on' before re-sending
+  gap_s: 3                    # seconds between switches (spreads the inrush current)

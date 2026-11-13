@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "show-power"
+version = "0.1.0"
+description = "Generate a Home Assistant package for safe, checked, weather-aware outdoor display power"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [{name = "Joe Pero"}]
+requires-python = ">=3.9"
+dependencies = ["pyyaml"]
+
+[project.optional-dependencies]
+test = ["jinja2"]
+
+[project.scripts]
+showpower = "showpower.cli:main"
+
+[tool.setuptools]
+packages = ["showpower"]
