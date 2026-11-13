@@ -96,7 +96,7 @@ for the 2026 season. Every rule in here was learned the hard way that season:
   prop dark, hence "wait for it to come online, then turn it on, then check".
 - Lamp projectors must cool before power is cut, and an IR blaster can't confirm a projector
   heard it, hence "cut only when confirmed, otherwise leave it on and say so".
-- The sound ran past a kid's bedtime once, hence sound and lights on separate clocks.
+- The sound ran too late on a school night, hence sound and lights on separate clocks.
 - Rainy nights were skipped by hand from a list of dates. This version reads the forecast.
 
 ## Tests
